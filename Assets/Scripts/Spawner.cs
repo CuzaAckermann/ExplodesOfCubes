@@ -1,13 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-
-public class Decomposer : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
+    [SerializeField] private Cube _cube;
     [SerializeField] private float _probabilitySeparation = 100;
-    [SerializeField] private float _explosionForce;
-    [SerializeField] private float _explosionRadius;
 
     private static int s_minAmountCubes = 2;
     private static int s_maxAmountCubes = 6;
@@ -18,30 +15,28 @@ public class Decomposer : MonoBehaviour
 
     private void Awake()
     {
-        gameObject.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
+        _cube = GetComponent<Cube>();
     }
 
-    private void OnMouseDown()
+    public bool TrySpawnCubes(out List<GameObject> cubes)
     {
+        cubes = new List<GameObject>();
+
         if (_probabilitySeparation >= Random.Range(s_minPercent, s_maxPercent + 1))
         {
             _probabilitySeparation /= s_reductionMultiplierForProbability;
-            Split();
+
+            cubes = CreateCubes();
+            InstatiateCubes(cubes);
+
+            return true;
         }
         else
         {
             Destroy(gameObject);
+
+            return false;
         }
-    }
-
-    private void Split()
-    {
-        List<GameObject> cubes = CreateCubes();
-        List<Rigidbody> rigidbodiesOfCubes = GetRigidbodiesCubes(cubes);
-        InstatiateCubes(cubes);
-        ExplodeCube(rigidbodiesOfCubes);
-
-        Destroy(gameObject);
     }
 
     private List<GameObject> CreateCubes()
@@ -54,22 +49,12 @@ public class Decomposer : MonoBehaviour
         {
             var newCube = gameObject;
             newCube.transform.localScale = scale;
+            gameObject.GetComponent<Renderer>().material.color =
+            new Color(Random.value, Random.value, Random.value);
             cubes.Add(newCube);
         }
 
         return cubes;
-    }
-
-    private List<Rigidbody> GetRigidbodiesCubes(List<GameObject> cubes)
-    {
-        List<Rigidbody> rigidbodies = new List<Rigidbody>();
-
-        for (int i = 0; i < cubes.Count; i++)
-        {
-            rigidbodies.Add(cubes[i].GetComponent<Rigidbody>());
-        }
-
-        return rigidbodies;
     }
 
     private void InstatiateCubes(List<GameObject> cubes)
@@ -77,14 +62,6 @@ public class Decomposer : MonoBehaviour
         for (int i = 0; i < cubes.Count; i++)
         {
             Instantiate(cubes[i], transform.position, Quaternion.identity);
-        }
-    }
-
-    private void ExplodeCube(List<Rigidbody> explodableObjects)
-    {
-        foreach (Rigidbody explodableObject in explodableObjects)
-        {
-            explodableObject.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
         }
     }
 }
