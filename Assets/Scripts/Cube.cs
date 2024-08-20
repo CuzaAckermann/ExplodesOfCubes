@@ -3,6 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Spawner))]
 [RequireComponent(typeof(Exploder))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class Cube : MonoBehaviour
 {
@@ -17,11 +18,8 @@ public class Cube : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (_spawner.TrySpawnCubes(out List<GameObject> cubes))
-        {
-            _exploder.ExplodeCubes(cubes);
+        List<GameObject> cubes = _spawner.SpawnCubes();
 
-            Destroy(gameObject);
-        }
+        _exploder.Explode(cubes);
     }
 }

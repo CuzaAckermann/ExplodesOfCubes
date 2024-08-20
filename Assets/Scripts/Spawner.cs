@@ -18,9 +18,9 @@ public class Spawner : MonoBehaviour
         _cube = GetComponent<Cube>();
     }
 
-    public bool TrySpawnCubes(out List<GameObject> cubes)
+    public List<GameObject> SpawnCubes()
     {
-        cubes = new List<GameObject>();
+        List<GameObject> cubes = new List<GameObject>();
 
         if (_probabilitySeparation >= Random.Range(s_minPercent, s_maxPercent + 1))
         {
@@ -28,15 +28,9 @@ public class Spawner : MonoBehaviour
 
             cubes = CreateCubes();
             InstatiateCubes(cubes);
-
-            return true;
         }
-        else
-        {
-            Destroy(gameObject);
 
-            return false;
-        }
+        return cubes;
     }
 
     private List<GameObject> CreateCubes()
