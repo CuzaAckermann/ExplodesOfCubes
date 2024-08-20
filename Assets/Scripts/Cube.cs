@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Spawner))]
-[RequireComponent(typeof(Exploder))]
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Spawner), typeof(Exploder), typeof(Rigidbody))]
 
 public class Cube : MonoBehaviour
 {

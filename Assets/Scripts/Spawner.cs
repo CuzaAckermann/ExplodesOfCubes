@@ -6,12 +6,12 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Cube _cube;
     [SerializeField] private float _probabilitySeparation = 100;
 
-    private static int s_minAmountCubes = 2;
-    private static int s_maxAmountCubes = 6;
-    private static int s_minPercent = 0;
-    private static int s_maxPercent = 100;
-    private static int s_reductionMultiplierForScale = 2;
-    private static int s_reductionMultiplierForProbability = 2;
+    private int s_minAmountCubes = 2;
+    private int s_maxAmountCubes = 6;
+    private int s_minPercent = 0;
+    private int s_maxPercent = 100;
+    private int s_reductionMultiplierForScale = 2;
+    private int s_reductionMultiplierForProbability = 2;
 
     private void Awake()
     {
@@ -43,8 +43,8 @@ public class Spawner : MonoBehaviour
         {
             var newCube = gameObject;
             newCube.transform.localScale = scale;
-            gameObject.GetComponent<Renderer>().material.color =
-            new Color(Random.value, Random.value, Random.value);
+            gameObject.GetComponent<Renderer>().material.color = 
+                new Color(Random.value, Random.value, Random.value);
             cubes.Add(newCube);
         }
 
